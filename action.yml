@@ -1,0 +1,27 @@
+name: 'ref'
+author: 'marcusljx'
+description: 'Outputs GitHub ref metadata currently unobtainable in GitHub actions'
+
+outputs:
+  slug:
+    description: '<SLUG> from ref/tags/<SLUG> or ref/heads/<SLUG>'
+    value: ${{ steps.github_meta.outputs.slug }}
+#  tag:
+#    description: '<TAG> from <ref/tags/<TAG>. Is the empty string if not triggered from a tag workflow.'
+#    value: ${{ steps.github_meta.outputs.tag }}
+#
+#  branch:
+#    description: "<BRANCH> from <ref/heads/<BRANCH>. Is the empty string if not triggered from a branch workflow."
+#    value: ${{ steps.github_meta.outputs.branch }}
+#
+#  version:
+#    description: "The semver tag without the 'v' prefix. Is the empty string if tag does not match semver, or if not triggered from a tag workflow."
+#    value: ${{ steps.github_meta.outputs.version }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: github_meta
+      shell: bash
+      run: |
+        echo ::set-output name=slug::${${GITHUB_REF#refs/heads/}#refs/tags/}
